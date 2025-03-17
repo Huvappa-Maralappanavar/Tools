@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Compress images online with high quality and fast processing. Reduce image file size without losing quality. Supports JPG, PNG, and WebP formats." />
+  <meta name="keywords" content="image compressor, optimize images, reduce file size, online image compression, photo optimizer, huvappa maralappanavar, huvappa" />
+  <meta name="author" content="Huvappa Maralappanavar"
+  <title>ImageCompress Pro | Optimize Your Images Online</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/compressorjs/1.1.1/compressor.min.js"></script>
+  <style>
+    :root {
+      --primary-color: #4A90E2;
+      --secondary-color: #34495e;
+      --background-color: #f8f9fa;
+      --text-color: #2c3e50;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      background-color: var(--background-color);
+      color: var(--text-color);
+    }
+    .header {
+      background: var(--primary-color);
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+    .container {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 2rem 1rem;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .upload-section {
+      border: 2px dashed var(--primary-color);
+      border-radius: 8px;
+      padding: 2rem;
+      text-align: center;
+      transition: all 0.3s ease;
+      margin-bottom: 1rem;
+    }
+    .upload-section:hover {
+      background: rgba(74, 144, 226, 0.05);
+    }
+    #fileInput {
+      display: none;
+    }
+    .custom-upload-btn {
+      background: var(--primary-color);
+      color: white;
+      padding: 0.8rem 1.5rem;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      display: inline-block;
+    }
+    .custom-upload-btn:hover {
+      transform: translateY(-2px);
+    }
+    .quality-control {
+      margin: 1rem 0;
+      text-align: center;
+    }
+    .quality-control label {
+      margin-right: 0.5rem;
+    }
+    .quality-control input[type="range"] {
+      width: 50%;
+      vertical-align: middle;
+    }
+    .btn {
+      background: var(--primary-color);
+      color: white;
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      display: inline-block;
+      margin: 0.5rem auto;
+      text-decoration: none;
+    }
+    .preview-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-top: 2rem;
+    }
+    .image-preview {
+      flex: 1;
+      text-align: center;
+      margin: 0 0.5rem;
+    }
+    .image-preview img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .stats {
+      background: white;
+      padding: 0.5rem;
+      border-radius: 8px;
+      margin-top: 0.5rem;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+    /* Tutorial Section Styles */
+    .tutorial-container {
+      margin-top: 2rem;
+      padding: 1rem;
+      background: var(--background-color);
+      border: 1px solid #ddd;
+      border-radius: 8px;
+    }
+    .tutorial-container h2 {
+      text-align: center;
+      margin-bottom: 1rem;
+      color: var(--primary-color);
+    }
+    .tutorial-container ol,
+    .tutorial-container ul {
+      max-width: 700px;
+      margin: 0 auto;
+      padding-left: 1.5rem;
+    }
+    .tutorial-container li {
+      margin-bottom: 0.5rem;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <h1>ImageCompress Pro</h1>
+  </header>
+  <main class="container">
+    <div class="upload-section" id="dropZone">
+      <input type="file" id="fileInput" accept="image/*">
+      <label for="fileInput" class="custom-upload-btn">
+        <i class="fas fa-upload"></i> Choose Image
+      </label>
+      <p>or drag and drop files here</p>
+    </div>
+    <div class="quality-control">
+      <label for="qualitySlider">Compression Quality: <span id="qualityValue">80</span>%</label>
+      <input type="range" id="qualitySlider" min="10" max="100" value="80">
+    </div>
+    <div style="text-align: center;">
+      <button class="btn" id="compressBtn">Compress Image</button>
+    </div>
+    <div class="preview-container" id="previewContainer">
+      <div class="image-preview">
+        <h3>Original</h3>
+        <img id="originalPreview" class="preview-image" alt="Original Image">
+        <div class="stats" id="originalStats"></div>
+      </div>
+      <div class="image-preview">
+        <h3>Compressed</h3>
+        <img id="compressedPreview" class="preview-image" alt="Compressed Image">
+        <div class="stats" id="compressedStats"></div>
+        <a id="downloadBtn" class="btn" style="display: none;">Download</a>
+      </div>
+    </div>
+    <!-- Tutorial Sections -->
+    <div class="tutorial-container">
+      <h2>How to Use</h2>
+      <ol>
+        <li><strong>Upload an Image:</strong> Click the "Choose Image" button or drag and drop your image into the upload area.</li>
+        <li><strong>Adjust Quality:</strong> Use the slider to set your desired compression quality.</li>
+        <li><strong>Compress:</strong> Click the "Compress Image" button to process your image.</li>
+        <li><strong>Preview & Download:</strong> View the original and compressed images with their file sizes. Click "Download" to save the compressed image.</li>
+      </ol>
+      <h2>Troubleshooting</h2>
+      <ul>
+        <li>If the image does not display, ensure that you have selected a valid image file.</li>
+        <li>If compression fails, try reducing the compression quality or using a different image format.</li>
+        <li>For performance issues, verify your system resources and file size; larger files may take longer to process.</li>
+        <li>If the download button is not showing, confirm that the compression process has completed successfully.</li>
+      </ul>
+    </div>
+  </main>
+  <script>
+    let selectedFile = null;
+    const fileInput = document.getElementById('fileInput');
+    const dropZone = document.getElementById('dropZone');
+    const qualitySlider = document.getElementById('qualitySlider');
+    const qualityValue = document.getElementById('qualityValue');
+    const compressBtn = document.getElementById('compressBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+
+    fileInput.addEventListener('change', (e) => {
+      selectedFile = e.target.files[0];
+      if (selectedFile) handleImage(selectedFile);
+    });
+
+    dropZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropZone.style.backgroundColor = 'rgba(74, 144, 226, 0.1)';
+    });
+
+    dropZone.addEventListener('dragleave', () => {
+      dropZone.style.backgroundColor = 'transparent';
+    });
+
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropZone.style.backgroundColor = 'transparent';
+      selectedFile = e.dataTransfer.files[0];
+      if (selectedFile) handleImage(selectedFile);
+    });
+
+    qualitySlider.addEventListener('input', () => {
+      qualityValue.textContent = qualitySlider.value;
+    });
+
+    compressBtn.addEventListener('click', () => {
+      if (!selectedFile) {
+        alert('Please select an image first!');
+        return;
+      }
+      compressImage(selectedFile);
+    });
+
+    function handleImage(file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        document.getElementById('originalPreview').src = e.target.result;
+        document.getElementById('originalStats').textContent = `Size: ${formatFileSize(file.size)}`;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function compressImage(file) {
+      new Compressor(file, {
+        quality: qualitySlider.value / 100,
+        success(result) {
+          const compressedUrl = URL.createObjectURL(result);
+          document.getElementById('compressedPreview').src = compressedUrl;
+          document.getElementById('compressedStats').textContent = `Size: ${formatFileSize(result.size)} (${Math.round((result.size / file.size) * 100)}% of original)`;
+          downloadBtn.href = compressedUrl;
+          downloadBtn.download = 'compressed_' + file.name;
+          downloadBtn.style.display = 'inline-block';
+        },
+        error(err) {
+          console.error(err.message);
+          alert('Compression failed. Please try again.');
+        }
+      });
+    }
+
+    function formatFileSize(bytes) {
+      if (bytes === 0) return '0 Bytes';
+      const k = 1024;
+      const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+  </script>
+</body>
+</html>
